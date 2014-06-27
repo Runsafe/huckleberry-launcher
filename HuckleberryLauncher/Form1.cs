@@ -16,5 +16,31 @@ namespace HuckleberryLauncher
         {
             InitializeComponent();
         }
+
+        private void fieldBlur(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (textBox.Text.Length == 0)
+            {
+                textBox.Text = textBox.Tag.ToString();
+                textBox.ForeColor = Color.Gray;
+
+                if (textBox.Name == "password")
+                    textBox.PasswordChar = '\0';
+            }
+        }
+
+        private void fieldFocus(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (textBox.ForeColor == Color.Gray)
+            {
+                textBox.ForeColor = Color.Black;
+                textBox.Text = String.Empty;
+
+                if (textBox.Name == "password")
+                    textBox.PasswordChar = '*';
+            }
+        }
     }
 }
