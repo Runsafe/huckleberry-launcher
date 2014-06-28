@@ -65,6 +65,17 @@ namespace HuckleberryLauncher
                     username.Show();
                     password.Show();
                     auth_loading_label.Hide();
+                    MessageBox.Show("Invalid username/password!", "Great Scott!");
+                });
+            }
+            else if (response == "noinvite")
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    username.Show();
+                    password.Show();
+                    auth_loading_label.Hide();
+                    MessageBox.Show("Your account hasn't been invited to Huckleberry yet!", "Great Scott!");
                 });
             }
         }
