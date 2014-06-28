@@ -28,34 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.logo = new ClickThroughPictureBox();
             this.exitButton = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
             this.player_head = new System.Windows.Forms.PictureBox();
+            this.updates_panel = new HuckleberryLauncher.TransparentRTF();
+            this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
-            ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player_head)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player_splash)).BeginInit();
             this.SuspendLayout();
-            // 
-            // logo
-            // 
-            this.logo.BackColor = System.Drawing.Color.Transparent;
-            this.logo.Image = global::HuckleberryLauncher.Properties.Resources.logo_small;
-            this.logo.Location = new System.Drawing.Point(25, 24);
-            this.logo.Name = "logo";
-            this.logo.Size = new System.Drawing.Size(432, 99);
-            this.logo.TabIndex = 0;
-            this.logo.TabStop = false;
             // 
             // exitButton
             // 
             this.exitButton.BackgroundImage = global::HuckleberryLauncher.Properties.Resources.exit_button_normal;
-            this.exitButton.Location = new System.Drawing.Point(923, 7);
+            this.exitButton.Location = new System.Drawing.Point(923, 9);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(32, 32);
             this.exitButton.TabIndex = 5;
@@ -109,6 +100,28 @@
             this.player_head.TabIndex = 1;
             this.player_head.TabStop = false;
             // 
+            // updates_panel
+            // 
+            this.updates_panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.updates_panel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.updates_panel.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.updates_panel.Location = new System.Drawing.Point(25, 141);
+            this.updates_panel.Name = "updates_panel";
+            this.updates_panel.ReadOnly = true;
+            this.updates_panel.Size = new System.Drawing.Size(494, 389);
+            this.updates_panel.TabIndex = 7;
+            this.updates_panel.Text = "Loading latest updates...";
+            // 
+            // logo
+            // 
+            this.logo.BackColor = System.Drawing.Color.Transparent;
+            this.logo.Image = global::HuckleberryLauncher.Properties.Resources.logo_small;
+            this.logo.Location = new System.Drawing.Point(25, 24);
+            this.logo.Name = "logo";
+            this.logo.Size = new System.Drawing.Size(432, 99);
+            this.logo.TabIndex = 0;
+            this.logo.TabStop = false;
+            // 
             // player_splash
             // 
             this.player_splash.BackColor = System.Drawing.Color.Transparent;
@@ -126,6 +139,7 @@
             this.BackgroundImage = global::HuckleberryLauncher.Properties.Resources.background_green;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(967, 548);
+            this.Controls.Add(this.updates_panel);
             this.Controls.Add(this.logo);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.panel1);
@@ -135,11 +149,11 @@
             this.Name = "Form1";
             this.Text = "Huckleberry - Runsafe Blend Minecraft";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
-            ((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player_head)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player_splash)).EndInit();
             this.ResumeLayout(false);
 
@@ -147,13 +161,15 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox logo;
         private System.Windows.Forms.PictureBox player_head;
         private System.Windows.Forms.TextBox password;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox username;
         private System.Windows.Forms.PictureBox exitButton;
         private SplashPlayerImage player_splash;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private ClickThroughPictureBox logo;
+        private TransparentRTF updates_panel;
 
     }
 }

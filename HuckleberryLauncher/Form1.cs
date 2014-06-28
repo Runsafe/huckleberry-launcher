@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
+using System.Threading;
 using System.Runtime.InteropServices;
 
 namespace HuckleberryLauncher
@@ -21,6 +22,25 @@ namespace HuckleberryLauncher
             InitializeComponent();
 
             player_splash.Image = (Image) Properties.Resources.ResourceManager.GetObject("player_shot_" + new Random().Next(1, 8));
+            new Thread(() => queryLatest()).Start();
+        }
+
+        public void queryLatest()
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadStringCompleted += (sender, e) =>
+                {
+                    setLatestContent(e.Result);
+                };
+                client.DownloadStringAsync(new Uri("https://huckleberry.runsafe.no/latest.txt"));
+            }
+        }
+
+        public void setLatestContent(String content)
+        {
+            Action action = delegate { updates_panel.Rtf = content; };
+            updates_panel.Invoke(action);
         }
 
         private void fieldBlur(object sender, EventArgs e)
