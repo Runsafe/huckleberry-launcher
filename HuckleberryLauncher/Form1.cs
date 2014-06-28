@@ -11,16 +11,24 @@ using System.Net;
 using System.Collections.Specialized;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace HuckleberryLauncher
 {
     public partial class MainForm : Form
     {
         private static String host = "https://huckleberry.runsafe.no/";
+        private static String folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\.huckleberry\";
+        private static String profile = folder + "profile";
+        private String loggedIn = null;
+        private String accessToken = null;
 
         public MainForm()
         {
             InitializeComponent();
+
+            Directory.CreateDirectory(folder);
 
             player_splash.Image = (Image) Properties.Resources.ResourceManager.GetObject("player_shot_" + new Random().Next(1, 8));
             new Thread(() => queryLatest()).Start();
@@ -77,6 +85,70 @@ namespace HuckleberryLauncher
                     auth_loading_label.Hide();
                     MessageBox.Show("Your account hasn't been invited to Huckleberry yet!", "Great Scott!");
                 });
+            }
+            else if (response.StartsWith("USER"))
+            {
+                loginPlayer(response);
+
+                using (StreamWriter writer = new StreamWriter(MainForm.profile))
+                    writer.WriteLine(response);
+            }
+        }
+
+        public void loginPlayer(String loginKey)
+        {
+            String[] split = loginKey.Substring(4).Split(',');
+
+            this.loggedIn = split[0];
+            this.accessToken = split[1];
+
+            String skinPath = MainForm.folder + this.loggedIn + ".png";
+
+            this.Invoke((MethodInvoker)delegate()
+            {
+                username.Hide();
+                password.Hide();
+
+                logged_in_label.Text = "Logged in as: " + this.loggedIn;
+                logged_in_label.Show();
+                play_button.Show();
+                logout_button.Show();
+                auth_loading_label.Hide();
+            });
+
+            applySkin(skinPath);
+            using (WebClient client = new WebClient())
+            {
+                client.Headers.Set("User-Agent", "Runsafe Huckleberry");
+                client.DownloadFileCompleted += (sender, e) =>
+                {
+                    applySkin(skinPath);
+                };
+                client.DownloadFileAsync(new Uri("http://s3.amazonaws.com/MinecraftSkins/" + this.loggedIn + ".png"), skinPath);
+            }
+        }
+
+        public void applySkin(String skinFile)
+        {
+            if (File.Exists(skinFile))
+            {
+                Bitmap bmpImage = new Bitmap(Image.FromFile(skinFile));
+                Bitmap bmpCrop = bmpImage.Clone(new Rectangle(8, 8, 8, 8), bmpImage.PixelFormat);
+
+                using (bmpCrop)
+                {
+                    var bmp2 = new Bitmap(player_head.Width, player_head.Height);
+                    using (var g = Graphics.FromImage(bmp2))
+                    {
+                        g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        g.DrawImage(bmpCrop, new Rectangle(Point.Empty, bmp2.Size));
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            player_head.Image = (Image)bmp2;
+                        });
+                    }
+                }
             }
         }
 
@@ -170,6 +242,30 @@ namespace HuckleberryLauncher
 
                 e.Handled = true;
             }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            if (File.Exists(MainForm.profile))
+            {
+                String loginKey = File.ReadAllText(MainForm.profile);
+                new Thread(() => loginPlayer(loginKey)).Start();
+            }
+        }
+
+        private void logout_button_Click(object sender, EventArgs e)
+        {
+            File.Delete(MainForm.profile);
+            this.loggedIn = null;
+            this.accessToken = null;
+
+            username.Show();
+            password.Show();
+            logged_in_label.Hide();
+            play_button.Hide();
+            logout_button.Hide();
+
+            player_head.Image = Properties.Resources.player_unknown1;
         }
     }
 }

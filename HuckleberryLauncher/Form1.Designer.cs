@@ -34,10 +34,13 @@
             this.password = new System.Windows.Forms.TextBox();
             this.player_head = new System.Windows.Forms.PictureBox();
             this.focus_holder = new System.Windows.Forms.Label();
+            this.auth_loading_label = new System.Windows.Forms.Label();
+            this.logged_in_label = new System.Windows.Forms.Label();
+            this.play_button = new System.Windows.Forms.Button();
+            this.logout_button = new System.Windows.Forms.Button();
             this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
-            this.auth_loading_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player_head)).BeginInit();
@@ -61,6 +64,9 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BackgroundImage = global::HuckleberryLauncher.Properties.Resources.transparent_bg;
+            this.panel1.Controls.Add(this.logout_button);
+            this.panel1.Controls.Add(this.play_button);
+            this.panel1.Controls.Add(this.logged_in_label);
             this.panel1.Controls.Add(this.auth_loading_label);
             this.panel1.Controls.Add(this.username);
             this.panel1.Controls.Add(this.password);
@@ -114,6 +120,49 @@
             this.focus_holder.Size = new System.Drawing.Size(0, 13);
             this.focus_holder.TabIndex = 1;
             // 
+            // auth_loading_label
+            // 
+            this.auth_loading_label.AutoSize = true;
+            this.auth_loading_label.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.auth_loading_label.Location = new System.Drawing.Point(65, 25);
+            this.auth_loading_label.Name = "auth_loading_label";
+            this.auth_loading_label.Size = new System.Drawing.Size(145, 25);
+            this.auth_loading_label.TabIndex = 3;
+            this.auth_loading_label.Text = "Logging in...";
+            this.auth_loading_label.Visible = false;
+            // 
+            // logged_in_label
+            // 
+            this.logged_in_label.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logged_in_label.Location = new System.Drawing.Point(9, 12);
+            this.logged_in_label.Name = "logged_in_label";
+            this.logged_in_label.Size = new System.Drawing.Size(257, 20);
+            this.logged_in_label.TabIndex = 3;
+            this.logged_in_label.Text = "Logged in as: Someone";
+            this.logged_in_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.logged_in_label.Visible = false;
+            // 
+            // play_button
+            // 
+            this.play_button.Location = new System.Drawing.Point(26, 40);
+            this.play_button.Name = "play_button";
+            this.play_button.Size = new System.Drawing.Size(104, 23);
+            this.play_button.TabIndex = 4;
+            this.play_button.Text = "Play!";
+            this.play_button.UseVisualStyleBackColor = true;
+            this.play_button.Visible = false;
+            // 
+            // logout_button
+            // 
+            this.logout_button.Location = new System.Drawing.Point(142, 40);
+            this.logout_button.Name = "logout_button";
+            this.logout_button.Size = new System.Drawing.Size(104, 23);
+            this.logout_button.TabIndex = 4;
+            this.logout_button.Text = "Logout";
+            this.logout_button.UseVisualStyleBackColor = true;
+            this.logout_button.Visible = false;
+            this.logout_button.Click += new System.EventHandler(this.logout_button_Click);
+            // 
             // updates_panel
             // 
             this.updates_panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -147,17 +196,6 @@
             this.player_splash.TabIndex = 6;
             this.player_splash.TabStop = false;
             // 
-            // auth_loading_label
-            // 
-            this.auth_loading_label.AutoSize = true;
-            this.auth_loading_label.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.auth_loading_label.Location = new System.Drawing.Point(65, 25);
-            this.auth_loading_label.Name = "auth_loading_label";
-            this.auth_loading_label.Size = new System.Drawing.Size(145, 25);
-            this.auth_loading_label.TabIndex = 3;
-            this.auth_loading_label.Text = "Logging in...";
-            this.auth_loading_label.Visible = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -176,6 +214,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "Huckleberry - Runsafe Blend Minecraft";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -201,6 +240,9 @@
         private TransparentRTF updates_panel;
         private System.Windows.Forms.Label focus_holder;
         private System.Windows.Forms.Label auth_loading_label;
+        private System.Windows.Forms.Button logout_button;
+        private System.Windows.Forms.Button play_button;
+        private System.Windows.Forms.Label logged_in_label;
 
     }
 }
