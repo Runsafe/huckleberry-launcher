@@ -1,6 +1,6 @@
 ﻿namespace HuckleberryLauncher
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -33,10 +33,10 @@
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
             this.player_head = new System.Windows.Forms.PictureBox();
+            this.focus_holder = new System.Windows.Forms.Label();
             this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
-            this.focus_holder = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player_head)).BeginInit();
@@ -78,6 +78,7 @@
             this.username.Tag = "Username...";
             this.username.Text = "Username...";
             this.username.Enter += new System.EventHandler(this.fieldFocus);
+            this.username.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.username_KeyPress);
             this.username.Leave += new System.EventHandler(this.fieldBlur);
             // 
             // password
@@ -90,6 +91,7 @@
             this.password.Tag = "Password...";
             this.password.Text = "Password...";
             this.password.Enter += new System.EventHandler(this.fieldFocus);
+            this.password.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.password_KeyPress);
             this.password.Leave += new System.EventHandler(this.fieldBlur);
             // 
             // player_head
@@ -100,6 +102,15 @@
             this.player_head.Size = new System.Drawing.Size(64, 64);
             this.player_head.TabIndex = 1;
             this.player_head.TabStop = false;
+            // 
+            // focus_holder
+            // 
+            this.focus_holder.AutoSize = true;
+            this.focus_holder.BackColor = System.Drawing.Color.Transparent;
+            this.focus_holder.Location = new System.Drawing.Point(12, -19);
+            this.focus_holder.Name = "focus_holder";
+            this.focus_holder.Size = new System.Drawing.Size(0, 13);
+            this.focus_holder.TabIndex = 1;
             // 
             // updates_panel
             // 
@@ -134,16 +145,7 @@
             this.player_splash.TabIndex = 6;
             this.player_splash.TabStop = false;
             // 
-            // focus_holder
-            // 
-            this.focus_holder.AutoSize = true;
-            this.focus_holder.BackColor = System.Drawing.Color.Transparent;
-            this.focus_holder.Location = new System.Drawing.Point(12, -19);
-            this.focus_holder.Name = "focus_holder";
-            this.focus_holder.Size = new System.Drawing.Size(0, 13);
-            this.focus_holder.TabIndex = 1;
-            // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -159,7 +161,7 @@
             this.Controls.Add(this.player_splash);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Huckleberry - Runsafe Blend Minecraft";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).EndInit();

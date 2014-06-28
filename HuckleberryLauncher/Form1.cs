@@ -15,9 +15,9 @@ using System.Runtime.InteropServices;
 
 namespace HuckleberryLauncher
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -104,6 +104,20 @@ namespace HuckleberryLauncher
         private void updates_panel_Enter(object sender, EventArgs e)
         {
             focus_holder.Focus();
+        }
+
+        private void username_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+                password.Focus();
+        }
+
+        private void password_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                // Something.
+            }
         }
     }
 }
