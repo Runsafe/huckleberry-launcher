@@ -9,6 +9,11 @@ namespace HuckleberryLauncher
 {
     class TransparentRTF : RichTextBox
     {
+        public TransparentRTF()
+        {
+            this.Cursor = Cursors.Arrow;
+        }
+
         protected override CreateParams CreateParams
         {
             get

@@ -100,5 +100,10 @@ namespace HuckleberryLauncher
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
+        private void updates_panel_Enter(object sender, EventArgs e)
+        {
+            focus_holder.Focus();
+        }
     }
 }

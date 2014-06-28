@@ -36,6 +36,7 @@
             this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
+            this.focus_holder = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player_head)).BeginInit();
@@ -104,6 +105,7 @@
             // 
             this.updates_panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.updates_panel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.updates_panel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.updates_panel.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.updates_panel.Location = new System.Drawing.Point(25, 141);
             this.updates_panel.Name = "updates_panel";
@@ -111,6 +113,7 @@
             this.updates_panel.Size = new System.Drawing.Size(494, 389);
             this.updates_panel.TabIndex = 7;
             this.updates_panel.Text = "Loading latest updates...";
+            this.updates_panel.Enter += new System.EventHandler(this.updates_panel_Enter);
             // 
             // logo
             // 
@@ -131,6 +134,15 @@
             this.player_splash.TabIndex = 6;
             this.player_splash.TabStop = false;
             // 
+            // focus_holder
+            // 
+            this.focus_holder.AutoSize = true;
+            this.focus_holder.BackColor = System.Drawing.Color.Transparent;
+            this.focus_holder.Location = new System.Drawing.Point(12, -19);
+            this.focus_holder.Name = "focus_holder";
+            this.focus_holder.Size = new System.Drawing.Size(0, 13);
+            this.focus_holder.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -139,6 +151,7 @@
             this.BackgroundImage = global::HuckleberryLauncher.Properties.Resources.background_green;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(967, 548);
+            this.Controls.Add(this.focus_holder);
             this.Controls.Add(this.updates_panel);
             this.Controls.Add(this.logo);
             this.Controls.Add(this.exitButton);
@@ -156,6 +169,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player_splash)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -170,6 +184,7 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private ClickThroughPictureBox logo;
         private TransparentRTF updates_panel;
+        private System.Windows.Forms.Label focus_holder;
 
     }
 }
