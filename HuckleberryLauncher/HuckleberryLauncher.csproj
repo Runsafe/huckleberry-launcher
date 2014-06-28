@@ -50,8 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticateRequest.cs" />
-    <Compile Include="AuthenticationAgent.cs" />
     <Compile Include="ClickThroughPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
