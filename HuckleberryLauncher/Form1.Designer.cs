@@ -37,6 +37,7 @@
             this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
+            this.auth_loading_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player_head)).BeginInit();
@@ -60,6 +61,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BackgroundImage = global::HuckleberryLauncher.Properties.Resources.transparent_bg;
+            this.panel1.Controls.Add(this.auth_loading_label);
             this.panel1.Controls.Add(this.username);
             this.panel1.Controls.Add(this.password);
             this.panel1.Controls.Add(this.player_head);
@@ -145,6 +147,17 @@
             this.player_splash.TabIndex = 6;
             this.player_splash.TabStop = false;
             // 
+            // auth_loading_label
+            // 
+            this.auth_loading_label.AutoSize = true;
+            this.auth_loading_label.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.auth_loading_label.Location = new System.Drawing.Point(65, 25);
+            this.auth_loading_label.Name = "auth_loading_label";
+            this.auth_loading_label.Size = new System.Drawing.Size(145, 25);
+            this.auth_loading_label.TabIndex = 3;
+            this.auth_loading_label.Text = "Logging in...";
+            this.auth_loading_label.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -187,6 +200,7 @@
         private ClickThroughPictureBox logo;
         private TransparentRTF updates_panel;
         private System.Windows.Forms.Label focus_holder;
+        private System.Windows.Forms.Label auth_loading_label;
 
     }
 }

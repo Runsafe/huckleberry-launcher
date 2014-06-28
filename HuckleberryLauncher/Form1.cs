@@ -16,6 +16,8 @@ namespace HuckleberryLauncher
 {
     public partial class MainForm : Form
     {
+        private static String host = "https://huckleberry.runsafe.no/";
+
         public MainForm()
         {
             InitializeComponent();
@@ -32,7 +34,7 @@ namespace HuckleberryLauncher
                 {
                     setLatestContent(e.Result);
                 };
-                client.DownloadStringAsync(new Uri("https://huckleberry.runsafe.no/latest.txt"));
+                client.DownloadStringAsync(new Uri(MainForm.host + "latest.txt"));
             }
         }
 
@@ -40,6 +42,31 @@ namespace HuckleberryLauncher
         {
             Action action = delegate { updates_panel.Rtf = content; };
             updates_panel.Invoke(action);
+        }
+
+        public void authenticateUser(String username, String password)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadStringCompleted += (sender, e) =>
+                {
+                    handleAuthenticationResponse(e.Result);
+                };
+                client.DownloadStringAsync(new Uri(MainForm.host + "auth.php?username=" + username + "&password=" + password));
+            }
+        }
+
+        public void handleAuthenticationResponse(String response)
+        {
+            if (response == "invalid")
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    username.Show();
+                    password.Show();
+                    auth_loading_label.Hide();
+                });
+            }
         }
 
         private void fieldBlur(object sender, EventArgs e)
@@ -108,14 +135,29 @@ namespace HuckleberryLauncher
         private void username_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
+            {
                 password.Focus();
+                e.Handled = true;
+            }
         }
 
         private void password_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
             {
-                // Something.
+                String username_value = username.Text.Trim();
+                String password_value = password.Text.Trim();
+
+                if (username_value.Length > 0 && password_value.Length > 0)
+                {
+                    username.Hide();
+                    password.Hide();
+                    auth_loading_label.Show();
+
+                    new Thread(() => authenticateUser(username_value, password_value)).Start();
+                }
+
+                e.Handled = true;
             }
         }
     }
