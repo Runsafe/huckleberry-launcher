@@ -43,6 +43,7 @@ namespace HuckleberryLauncher
                     setLatestContent(e.Result);
                 };
                 client.DownloadStringAsync(new Uri(MainForm.host + "latest.txt"));
+                client.Dispose();
             }
         }
 
@@ -61,6 +62,7 @@ namespace HuckleberryLauncher
                     handleAuthenticationResponse(e.Result);
                 };
                 client.DownloadStringAsync(new Uri(MainForm.host + "auth.php?username=" + username + "&password=" + password));
+                client.Dispose();
             }
         }
 
@@ -91,7 +93,10 @@ namespace HuckleberryLauncher
                 loginPlayer(response);
 
                 using (StreamWriter writer = new StreamWriter(MainForm.profile))
+                {
                     writer.WriteLine(response);
+                    writer.Dispose();
+                }
             }
         }
 
@@ -125,6 +130,7 @@ namespace HuckleberryLauncher
                     applySkin(skinPath);
                 };
                 client.DownloadFileAsync(new Uri("http://s3.amazonaws.com/MinecraftSkins/" + this.loggedIn + ".png"), skinPath);
+                client.Dispose();
             }
         }
 
