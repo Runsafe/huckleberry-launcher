@@ -63,9 +63,9 @@ namespace HuckleberryLauncher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap huckleberry_back {
+        internal static System.Drawing.Bitmap background_green {
             get {
-                object obj = ResourceManager.GetObject("huckleberry_back", resourceCulture);
+                object obj = ResourceManager.GetObject("background_green", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace HuckleberryLauncher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logo_small1 {
+        internal static System.Drawing.Bitmap exit_button_hover {
             get {
-                object obj = ResourceManager.GetObject("logo_small1", resourceCulture);
+                object obj = ResourceManager.GetObject("exit_button_hover", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,89 @@ namespace HuckleberryLauncher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap player_unknown {
+        internal static System.Drawing.Bitmap exit_button_normal {
             get {
-                object obj = ResourceManager.GetObject("player_unknown", resourceCulture);
+                object obj = ResourceManager.GetObject("exit_button_normal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_small {
+            get {
+                object obj = ResourceManager.GetObject("logo_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_1 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_2 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_3 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_4 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_5 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_6 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_shot_7 {
+            get {
+                object obj = ResourceManager.GetObject("player_shot_7", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
