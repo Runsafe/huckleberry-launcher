@@ -169,6 +169,7 @@
             // 
             this.loadbar.ForeColor = System.Drawing.Color.Yellow;
             this.loadbar.Location = new System.Drawing.Point(13, 515);
+            this.loadbar.Maximum = 0;
             this.loadbar.Name = "loadbar";
             this.loadbar.Size = new System.Drawing.Size(588, 23);
             this.loadbar.TabIndex = 8;

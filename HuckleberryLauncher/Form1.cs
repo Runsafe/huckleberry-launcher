@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace HuckleberryLauncher
 {
@@ -24,6 +25,9 @@ namespace HuckleberryLauncher
         private static String profile = folder + "profile";
         private String loggedIn = null;
         private String accessToken = null;
+        private Boolean assetSyncStarted = false;
+        private Boolean libSyncStarted = false;
+        private List<String> libs = new List<String>();
 
         public MainForm()
         {
@@ -285,6 +289,60 @@ namespace HuckleberryLauncher
             loadbar.Show();
 
             new Thread(() => loadLibs()).Start();
+            new Thread(() => loadAssets()).Start();
+        }
+
+        public void loadAssets()
+        {
+            WebClient client = new WebClient();
+            String assetList = client.DownloadString(new Uri(MainForm.host + "assets.dat"));
+            client.Dispose();
+
+            String[] asset_split = assetList.Split((char) 31);
+            String[] asset_dir_mappings = asset_split[0].Split((char) 30);
+
+            foreach (String mapping in asset_dir_mappings)
+                Directory.CreateDirectory(MainForm.folder + @"assets\" + mapping);
+
+            String[] assets = asset_split[1].Split((char)30);
+
+            this.Invoke((MethodInvoker)delegate()
+            {
+                assetSyncStarted = true;
+                loadbar.Maximum += assets.Length;
+            });
+
+            String assetFolder = MainForm.folder + @"assets\";
+            foreach (String asset in assets)
+            {
+                String[] asset_parts = asset.Split(':');
+                String assetPath = assetFolder + asset_parts[0];
+
+                if (File.Exists(assetPath))
+                {
+                    using (var md5 = MD5.Create())
+                    {
+                        using (var stream = File.OpenRead(assetPath))
+                        {
+                            if (asset_parts[1] == BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower())
+                            {
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    libComplete();
+                                });
+                            }
+                            else
+                            {
+                                startAssetDownload(asset_parts[0], assetPath);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    startAssetDownload(asset_parts[0], assetPath);
+                }
+            }
         }
 
         public void loadLibs()
@@ -297,15 +355,22 @@ namespace HuckleberryLauncher
 
             this.Invoke((MethodInvoker)delegate()
             {
-                loadbar.Maximum = libs.Length;
+                libSyncStarted = true;
+                loadbar.Maximum += libs.Length;
             });
+
+            String libFolder = MainForm.folder + @"libs\";
+            Directory.CreateDirectory(libFolder);
 
             foreach (String lib in libs)
             {
                 String[] lib_parts = lib.Split(':');
-                String libFolder = MainForm.folder + "libs/";
                 String libPath = libFolder + lib_parts[0];
-                Directory.CreateDirectory(libFolder);
+
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    this.libs.Add(libPath);
+                });
 
                 if (File.Exists(libPath))
                 {
@@ -349,9 +414,39 @@ namespace HuckleberryLauncher
             }
         }
 
+        public void startAssetDownload(String asset, String path)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFileCompleted += (sender, e) =>
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        libComplete();
+                    });
+                };
+                client.DownloadFileAsync(new Uri(MainForm.host + "client/assets/" + asset), path);
+            }
+        }
+
         public void libComplete()
         {
             loadbar.Value += 1;
+            checkSyncStatus();
+        }
+
+        public void checkSyncStatus()
+        {
+            if (libSyncStarted && assetSyncStarted && loadbar.Value == loadbar.Maximum)
+            {
+                Process process = new System.Diagnostics.Process();
+                ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "java";
+                startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libs) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
+                process.StartInfo = startInfo;
+                process.Start();
+            }
         }
     }
 }
