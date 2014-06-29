@@ -13,6 +13,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing.Drawing2D;
+using System.Security.Cryptography;
 
 namespace HuckleberryLauncher
 {
@@ -107,7 +108,9 @@ namespace HuckleberryLauncher
             this.loggedIn = split[0];
             this.accessToken = split[1];
 
-            String skinPath = MainForm.folder + this.loggedIn + ".png";
+            String skinFolder = MainForm.folder + "skin_cache/";
+            String skinPath = skinFolder + this.loggedIn + ".png";
+            Directory.CreateDirectory(skinFolder);
 
             this.Invoke((MethodInvoker)delegate()
             {
@@ -272,6 +275,83 @@ namespace HuckleberryLauncher
             logout_button.Hide();
 
             player_head.Image = Properties.Resources.player_unknown1;
+        }
+
+        private void play_button_Click(object sender, EventArgs e)
+        {
+            play_button.Enabled = false;
+            logout_button.Enabled = false;
+
+            loadbar.Show();
+
+            new Thread(() => loadLibs()).Start();
+        }
+
+        public void loadLibs()
+        {
+            WebClient client = new WebClient();
+            String lib_list = client.DownloadString(new Uri(MainForm.host + "lib_list.php"));
+            client.Dispose();
+
+            String[] libs = lib_list.Split(',');
+
+            this.Invoke((MethodInvoker)delegate()
+            {
+                loadbar.Maximum = libs.Length;
+            });
+
+            foreach (String lib in libs)
+            {
+                String[] lib_parts = lib.Split(':');
+                String libFolder = MainForm.folder + "libs/";
+                String libPath = libFolder + lib_parts[0];
+                Directory.CreateDirectory(libFolder);
+
+                if (File.Exists(libPath))
+                {
+                    using (var md5 = MD5.Create())
+                    {
+                        using (var stream = File.OpenRead(libPath))
+                        {
+                            if (lib_parts[1] == BitConverter.ToString(md5.ComputeHash(stream)).Replace("-","").ToLower())
+                            {
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    libComplete();
+                                });
+                            }
+                            else
+                            {
+                                startLibDownload(lib_parts[0], libPath);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    startLibDownload(lib_parts[0], libPath);
+                }
+            }
+        }
+
+        public void startLibDownload(String lib, String path)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFileCompleted += (sender, e) =>
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        libComplete();
+                    });
+                };
+                client.DownloadFileAsync(new Uri(MainForm.host + "client/libs/" + lib), path);
+            }
+        }
+
+        public void libComplete()
+        {
+            loadbar.Value += 1;
         }
     }
 }

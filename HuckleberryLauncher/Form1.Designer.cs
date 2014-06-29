@@ -38,6 +38,7 @@
             this.logged_in_label = new System.Windows.Forms.Label();
             this.play_button = new System.Windows.Forms.Button();
             this.logout_button = new System.Windows.Forms.Button();
+            this.loadbar = new System.Windows.Forms.ProgressBar();
             this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
@@ -151,6 +152,7 @@
             this.play_button.Text = "Play!";
             this.play_button.UseVisualStyleBackColor = true;
             this.play_button.Visible = false;
+            this.play_button.Click += new System.EventHandler(this.play_button_Click);
             // 
             // logout_button
             // 
@@ -163,6 +165,15 @@
             this.logout_button.Visible = false;
             this.logout_button.Click += new System.EventHandler(this.logout_button_Click);
             // 
+            // loadbar
+            // 
+            this.loadbar.ForeColor = System.Drawing.Color.Yellow;
+            this.loadbar.Location = new System.Drawing.Point(13, 515);
+            this.loadbar.Name = "loadbar";
+            this.loadbar.Size = new System.Drawing.Size(588, 23);
+            this.loadbar.TabIndex = 8;
+            this.loadbar.Visible = false;
+            // 
             // updates_panel
             // 
             this.updates_panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -172,7 +183,7 @@
             this.updates_panel.Location = new System.Drawing.Point(25, 141);
             this.updates_panel.Name = "updates_panel";
             this.updates_panel.ReadOnly = true;
-            this.updates_panel.Size = new System.Drawing.Size(494, 389);
+            this.updates_panel.Size = new System.Drawing.Size(494, 353);
             this.updates_panel.TabIndex = 7;
             this.updates_panel.Text = "Loading latest updates...";
             this.updates_panel.Enter += new System.EventHandler(this.updates_panel_Enter);
@@ -204,6 +215,7 @@
             this.BackgroundImage = global::HuckleberryLauncher.Properties.Resources.background_green;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(967, 548);
+            this.Controls.Add(this.loadbar);
             this.Controls.Add(this.focus_holder);
             this.Controls.Add(this.updates_panel);
             this.Controls.Add(this.logo);
@@ -243,6 +255,7 @@
         private System.Windows.Forms.Button logout_button;
         private System.Windows.Forms.Button play_button;
         private System.Windows.Forms.Label logged_in_label;
+        private System.Windows.Forms.ProgressBar loadbar;
 
     }
 }
