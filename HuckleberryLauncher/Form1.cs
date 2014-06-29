@@ -446,6 +446,7 @@ namespace HuckleberryLauncher
                 startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libs) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
                 process.StartInfo = startInfo;
                 process.Start();
+                Application.Exit();
             }
         }
     }
