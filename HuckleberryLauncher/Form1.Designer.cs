@@ -31,14 +31,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.exitButton = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.logout_button = new System.Windows.Forms.Button();
+            this.play_button = new System.Windows.Forms.Button();
+            this.logged_in_label = new System.Windows.Forms.Label();
+            this.auth_loading_label = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
             this.player_head = new System.Windows.Forms.PictureBox();
             this.focus_holder = new System.Windows.Forms.Label();
-            this.auth_loading_label = new System.Windows.Forms.Label();
-            this.logged_in_label = new System.Windows.Forms.Label();
-            this.play_button = new System.Windows.Forms.Button();
-            this.logout_button = new System.Windows.Forms.Button();
             this.loadbar = new System.Windows.Forms.ProgressBar();
             this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
@@ -77,6 +77,50 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(342, 76);
             this.panel1.TabIndex = 4;
+            // 
+            // logout_button
+            // 
+            this.logout_button.Location = new System.Drawing.Point(142, 40);
+            this.logout_button.Name = "logout_button";
+            this.logout_button.Size = new System.Drawing.Size(104, 23);
+            this.logout_button.TabIndex = 4;
+            this.logout_button.Text = "Logout";
+            this.logout_button.UseVisualStyleBackColor = true;
+            this.logout_button.Visible = false;
+            this.logout_button.Click += new System.EventHandler(this.logout_button_Click);
+            // 
+            // play_button
+            // 
+            this.play_button.Location = new System.Drawing.Point(26, 40);
+            this.play_button.Name = "play_button";
+            this.play_button.Size = new System.Drawing.Size(104, 23);
+            this.play_button.TabIndex = 4;
+            this.play_button.Text = "Play!";
+            this.play_button.UseVisualStyleBackColor = true;
+            this.play_button.Visible = false;
+            this.play_button.Click += new System.EventHandler(this.play_button_Click);
+            // 
+            // logged_in_label
+            // 
+            this.logged_in_label.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logged_in_label.Location = new System.Drawing.Point(9, 12);
+            this.logged_in_label.Name = "logged_in_label";
+            this.logged_in_label.Size = new System.Drawing.Size(257, 20);
+            this.logged_in_label.TabIndex = 3;
+            this.logged_in_label.Text = "Logged in as: Someone";
+            this.logged_in_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.logged_in_label.Visible = false;
+            // 
+            // auth_loading_label
+            // 
+            this.auth_loading_label.AutoSize = true;
+            this.auth_loading_label.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.auth_loading_label.Location = new System.Drawing.Point(65, 25);
+            this.auth_loading_label.Name = "auth_loading_label";
+            this.auth_loading_label.Size = new System.Drawing.Size(145, 25);
+            this.auth_loading_label.TabIndex = 3;
+            this.auth_loading_label.Text = "Logging in...";
+            this.auth_loading_label.Visible = false;
             // 
             // username
             // 
@@ -122,50 +166,6 @@
             this.focus_holder.Size = new System.Drawing.Size(0, 13);
             this.focus_holder.TabIndex = 1;
             // 
-            // auth_loading_label
-            // 
-            this.auth_loading_label.AutoSize = true;
-            this.auth_loading_label.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.auth_loading_label.Location = new System.Drawing.Point(65, 25);
-            this.auth_loading_label.Name = "auth_loading_label";
-            this.auth_loading_label.Size = new System.Drawing.Size(145, 25);
-            this.auth_loading_label.TabIndex = 3;
-            this.auth_loading_label.Text = "Logging in...";
-            this.auth_loading_label.Visible = false;
-            // 
-            // logged_in_label
-            // 
-            this.logged_in_label.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logged_in_label.Location = new System.Drawing.Point(9, 12);
-            this.logged_in_label.Name = "logged_in_label";
-            this.logged_in_label.Size = new System.Drawing.Size(257, 20);
-            this.logged_in_label.TabIndex = 3;
-            this.logged_in_label.Text = "Logged in as: Someone";
-            this.logged_in_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.logged_in_label.Visible = false;
-            // 
-            // play_button
-            // 
-            this.play_button.Location = new System.Drawing.Point(26, 40);
-            this.play_button.Name = "play_button";
-            this.play_button.Size = new System.Drawing.Size(104, 23);
-            this.play_button.TabIndex = 4;
-            this.play_button.Text = "Play!";
-            this.play_button.UseVisualStyleBackColor = true;
-            this.play_button.Visible = false;
-            this.play_button.Click += new System.EventHandler(this.play_button_Click);
-            // 
-            // logout_button
-            // 
-            this.logout_button.Location = new System.Drawing.Point(142, 40);
-            this.logout_button.Name = "logout_button";
-            this.logout_button.Size = new System.Drawing.Size(104, 23);
-            this.logout_button.TabIndex = 4;
-            this.logout_button.Text = "Logout";
-            this.logout_button.UseVisualStyleBackColor = true;
-            this.logout_button.Visible = false;
-            this.logout_button.Click += new System.EventHandler(this.logout_button_Click);
-            // 
             // loadbar
             // 
             this.loadbar.ForeColor = System.Drawing.Color.Yellow;
@@ -193,7 +193,7 @@
             // logo
             // 
             this.logo.BackColor = System.Drawing.Color.Transparent;
-            this.logo.Image = global::HuckleberryLauncher.Properties.Resources.logo_small;
+            this.logo.Image = ((System.Drawing.Image)(resources.GetObject("logo.Image")));
             this.logo.Location = new System.Drawing.Point(25, 24);
             this.logo.Name = "logo";
             this.logo.Size = new System.Drawing.Size(432, 99);

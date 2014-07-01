@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>new_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -121,9 +121,6 @@
     <None Include="Resources\background_green.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logo_small.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\player_shot_3.png" />
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +142,8 @@
     <None Include="Resources\player_shot_2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Content Include="new_icon.ico" />
+    <None Include="Resources\logo_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

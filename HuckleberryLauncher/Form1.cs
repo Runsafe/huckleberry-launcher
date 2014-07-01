@@ -27,7 +27,7 @@ namespace HuckleberryLauncher
         private String accessToken = null;
         private Boolean assetSyncStarted = false;
         private Boolean libSyncStarted = false;
-        private List<String> libs = new List<String>();
+        private List<String> libCollection = new List<String>();
 
         public MainForm()
         {
@@ -324,7 +324,11 @@ namespace HuckleberryLauncher
                     {
                         using (var stream = File.OpenRead(assetPath))
                         {
-                            if (asset_parts[1] == BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower())
+                            String hash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
+                            stream.Close();
+                            md5.Dispose();
+
+                            if (asset_parts[1] == hash)
                             {
                                 this.Invoke((MethodInvoker)delegate()
                                 {
@@ -369,7 +373,7 @@ namespace HuckleberryLauncher
 
                 this.Invoke((MethodInvoker)delegate()
                 {
-                    this.libs.Add(libPath);
+                    this.libCollection.Add(libPath);
                 });
 
                 if (File.Exists(libPath))
@@ -378,7 +382,11 @@ namespace HuckleberryLauncher
                     {
                         using (var stream = File.OpenRead(libPath))
                         {
-                            if (lib_parts[1] == BitConverter.ToString(md5.ComputeHash(stream)).Replace("-","").ToLower())
+                            String hash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
+                            stream.Close();
+                            md5.Dispose();
+
+                            if (lib_parts[1] == hash)
                             {
                                 this.Invoke((MethodInvoker)delegate()
                                 {
@@ -401,6 +409,8 @@ namespace HuckleberryLauncher
 
         public void startLibDownload(String lib, String path)
         {
+            Console.Write("Lib: " + lib);
+            Console.Write("Path: " + path);
             using (WebClient client = new WebClient())
             {
                 client.DownloadFileCompleted += (sender, e) =>
@@ -443,7 +453,7 @@ namespace HuckleberryLauncher
                 ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = "java";
-                startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libs) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
+                startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
                 process.StartInfo = startInfo;
                 process.Start();
                 Application.Exit();
