@@ -13,6 +13,10 @@ __rvm_md5_for()
   return 0
 }
 
+path=$([[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}")
+
+echo $path
+
 read -p "Enter your Huckleberry username:" un
 read -p "Enter your Huckleberry password:" pn
 
@@ -20,11 +24,13 @@ UUID=$(curl -s "https://huckleberry.runsafe.no/auth.php?username=${un}&password=
 
 if [ $UUID = 'invalid' ]; then
 	echo "Invalid username and/or password"
+	read -p "Press [Enter] to exit."
 	exit
 fi
 
 if [ $UUID = 'noinvite' ]; then
 	echo "You have not been invited to Huckleberry yet!"
+	read -p "Press [Enter] to exit."
 	exit
 fi
 
@@ -33,7 +39,7 @@ user=$(echo $key | awk -F"," '{print $1}')
 key=$(echo $key | awk -F"," '{print $2}')
 
 lib_list=$(curl -s "https://huckleberry.runsafe.no/lib_list.php");
-lib_dir="./libs/"
+lib_dir="${path}libs/"
 
 if [ ! -d "$lib_dir" ]; then
   mkdir -p "$lib_dir"
@@ -49,7 +55,7 @@ do
 	lib_path="$lib_dir$lib_name"
     echo "Checking library: $lib_name"
 	
-	lib_bin=("${lib_bin[@]}" "libs/$lib_name")
+	lib_bin=("${lib_bin[@]}" "${path}libs/$lib_name")
 			
 	if [ ! -f ./libs/$lib_name ]; then
 		echo "Library does not exist, downloading"
@@ -75,7 +81,7 @@ IFS="$delim_r" read -a asset_dirs <<< "${assets[0]}"
 
 for asset_dir in "${asset_dirs[@]}"
 do
-	asset_dir="assets/$asset_dir"
+	asset_dir="${path}assets/$asset_dir"
 	if [ ! -d "$asset_dir" ]; then
 	  mkdir -p "$asset_dir"
 	  echo "Creating asset directory: $asset_dir"
@@ -88,7 +94,7 @@ do
 	asset_name=$(echo $asset | awk -F":" '{print $1}')
 	asset_hash=$(echo $asset | awk -F":" '{print $2}')
 	
-	asset_path="assets/$asset_name"
+	asset_path="${path}assets/$asset_name"
 	
 	if [ ! -f ./$asset_path ]; then
 		echo "Downloading asset: $asset_name"
@@ -105,4 +111,4 @@ do
 done
 
 libbys=$(IFS=';'; echo "${lib_bin[*]}")
-$(java -Djava.library.path=libs -cp ${libbys} net.minecraft.client.main.Main --username $user --session $key --version 1.6.4)
+$(java -Djava.library.path="libs" -cp "${libbys}" net.minecraft.client.main.Main --username $user --session $key --version 1.6.4)

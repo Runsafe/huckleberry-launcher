@@ -129,8 +129,8 @@
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(236, 20);
             this.username.TabIndex = 2;
-            this.username.Tag = "Username...";
-            this.username.Text = "Username...";
+            this.username.Tag = "Runsafe Account E-mail...";
+            this.username.Text = "Runsafe Account E-mail...";
             this.username.Enter += new System.EventHandler(this.fieldFocus);
             this.username.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.username_KeyPress);
             this.username.Leave += new System.EventHandler(this.fieldBlur);
