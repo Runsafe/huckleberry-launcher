@@ -96,7 +96,7 @@ do
 	
 	asset_path="${path}assets/$asset_name"
 	
-	if [ ! -f ./$asset_path ]; then
+	if [ ! -f $asset_path ]; then
 		echo "Downloading asset: $asset_name"
 		curl -s -o "$asset_path" "https://huckleberry.runsafe.no/client/assets/$asset_name"
 	else
