@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -x
 __rvm_md5_for()
 {
   if builtin command -v md5 > /dev/null; then
