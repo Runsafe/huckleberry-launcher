@@ -18,7 +18,7 @@ path=$([[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}")
 echo $path
 
 read -p "Enter your Huckleberry username:" un
-read -p "Enter your Huckleberry password:" pn
+read -sp "Enter your Huckleberry password:" pn
 
 UUID=$(curl -s "https://huckleberry.runsafe.no/auth.php?username=${un}&password=${pn}")
 
