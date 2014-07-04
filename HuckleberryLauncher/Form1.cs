@@ -449,14 +449,21 @@ namespace HuckleberryLauncher
         {
             if (libSyncStarted && assetSyncStarted && loadbar.Value == loadbar.Maximum)
             {
-                Process process = new System.Diagnostics.Process();
-                ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "java";
-                startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
-                process.StartInfo = startInfo;
-                process.Start();
-                Application.Exit();
+                try
+                {
+                    Process process = new System.Diagnostics.Process();
+                    ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "java";
+                    startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    Application.Exit();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Java path not set-up! Consult the Huckleberry wiki!");
+                }
             }
         }
     }
