@@ -192,6 +192,19 @@ output()
 	fi
 }
 
+usage()
+{
+	echo "$0 [options]"
+	echo " Available options:"
+	echo "  -v                Modify output verbosity. Specify multiple times to increase level."
+	echo "  -p <path>         Specify where to store assets. Defaults to current folder."
+	echo "  -j <maxjobs>      Control paralellism of downloader."
+	echo "  --username <user> Specify username to log in as from command line."
+	echo "  --password <pass> Specify password to log in with from command line."
+	echo "  --help            Show this help"
+	exit 0
+}
+
 max_jobs=32
 verbose=0
 path=$PWD/
@@ -204,6 +217,7 @@ while [ $# -gt 0 ]; do
 		"--username")	shift; un=$1 ;;
 		"--password")	shift; pn=$1 ;;
 		"-j")		shift; max_jobs=$1 ;;
+		"--help")	usage ;;
 	esac
 	shift
 done
