@@ -107,7 +107,7 @@ cleanup()
 startclient()
 {
 	classpath=$(join ':' libs/*.jar)
-	java -Djava.library.path="libs" -cp "$classpath" net.minecraft.client.main.Main --username $user --session $key --version $1
+	java -Djava.library.path="libs" -cp "$classpath" net.minecraft.client.main.Main --username $user --session $key --version $1 $args
 }
 
 updatelib()
@@ -233,6 +233,7 @@ getargs()
 			"-j")		shift; max_jobs=$1 ;;
 			"--help")	usage ;;
 			"--noupdate")	update=0 ;;
+			"--")		shift; args=$*; return ;;
 		esac
 		shift
 	done
@@ -255,6 +256,7 @@ update=1
 max_jobs=32
 verbose=0
 path=$PWD/
+args=
 un=
 pn=
 DULL=0
