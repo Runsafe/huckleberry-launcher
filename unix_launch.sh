@@ -16,7 +16,7 @@ update()
 {
 	temp=$(mktemp)
 	output "Checking for launcher update"
-	curl -s -o $temp "https://github.com/Runsafe/huckleberry-launcher/releases/download/vUnix/unix_launch.sh"
+	curl -s -o $temp "https://raw.githubusercontent.com/Runsafe/huckleberry-launcher/vUnix/unix_launch.sh"
 	latest=$(__rvm_md5_for $temp)
 	running=$(__rvm_md5_for $0)
 	if [ "$latest" != "$running" ]; then
