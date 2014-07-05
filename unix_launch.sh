@@ -198,21 +198,13 @@ path=$PWD/
 un=
 pn=
 while [ $# -gt 0 ]; do
-	if [ "$1" == "-v" ]; then
-		(( verbose=$verbose+1 ))
-	elif [ "$1" == "-p" ]; then
-		shift
-		path=$1
-	elif [ "$1" == "--username" ]; then
-		shift
-		un=$1
-	elif [ "$1" == "--password" ]; then
-		shift
-		pn=$1
-	elif [ "$1" == "-j" ]; then
-		shift
-		max_jobs=$1
-	fi
+	case $1 in
+		"-v")		(( verbose=$verbose+1 ));;
+		"-p")		shift; path=$1 ;;
+		"--username")	shift; un=$1 ;;
+		"--password")	shift; pn=$1 ;;
+		"-j")		shift; max_jobs=$1 ;;
+	esac
 	shift
 done
 lib_dir="${path}libs/"
