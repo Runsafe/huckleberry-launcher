@@ -14,9 +14,13 @@ run()
 
 login()
 {
-	read -p "Enter your Huckleberry username: " un
-	read -sp "Enter your Huckleberry password: " pn
-	echo
+	if [ -z "$un" ]; then
+		read -p "Enter your Huckleberry username: " un
+	fi
+	if [ -z "$pn" ]; then
+		read -sp "Enter your Huckleberry password: " pn
+		echo
+	fi
 
 	UUID=$(curl -s "https://huckleberry.runsafe.no/auth.php?username=${un}&password=${pn}")
 
@@ -185,12 +189,20 @@ output()
 
 verbose=0
 path=$PWD/
+un=
+pn=
 while [ $# -gt 0 ]; do
 	if [ "$1" == "-v" ]; then
 		(( verbose=$verbose+1 ))
 	elif [ "$1" == "-p" ]; then
 		shift
 		path=$1
+	elif [ "$1" == "--username" ]; then
+		shift
+		un=$1
+	elif [ "$1" == "--password" ]; then
+		shift
+		pn=$1
 	fi
 	shift
 done
