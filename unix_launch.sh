@@ -3,13 +3,38 @@ set +x
 
 run()
 {
+	echo -e '\033]2;Huckleberry\007'
+	getargs $*
+	if [ $update -eq 1 ]; then
+		update $*
+	fi
 	login
+	mkdirs
 	fetchinventory
 	parallelize updatelib "${GREEN}Updating libraries${RESET}" "${libs[@]}"
 	parallelize mkassetdir "${GREEN}Creating asset folders${RESET}" "${asset_dirs[@]}"
 	parallelize updateasset "${GREEN}Updating asset files${RESET}" "${assets[@]}"
 	cleanup 
 	startclient 1.6.4
+}
+
+update()
+{
+	temp=$(mktemp)
+	echo "Checking for launcher update"
+	curl -s -o $temp "https://raw.githubusercontent.com/Runsafe/huckleberry-launcher/${channel}/unix_launch.sh"
+	latest=$(__rvm_md5_for $temp)
+	running=$(__rvm_md5_for $0)
+	if [ "$latest" != "$running" ]; then
+		echo "Updating launcher"
+		mv $temp $0
+		chmod +x $0
+		echo "Restarting launcher"
+		$0 --noupdate $*
+		exit
+	else
+		rm -f $temp
+	fi
 }
 
 login()
@@ -75,14 +100,14 @@ parallelize()
 
 cleanup()
 {
-	find */ -type f -mmin +30 -delete
+	find $asset_dir $lib_dir -type f -mmin +30 -delete
 	find -type d -empty -delete
 }
 
 startclient()
 {
 	classpath=$(join ':' libs/*.jar)
-	java -Djava.library.path="libs" -cp "$classpath" net.minecraft.client.main.Main --username $user --session $key --version $1
+	java -Djava.library.path="libs" -cp "$classpath" net.minecraft.client.main.Main --username $user --session $key --version $1 $args
 }
 
 updatelib()
@@ -97,9 +122,9 @@ updatelib()
 
 mkassetdir()
 {
-	if [ ! -d "${path}assets/$1" ]; then
+	if [ ! -d "${asset_dir}$1" ]; then
 		output "${BRIGHT_GREEN}N${RESET}" "Creating folder: ${BRIGHT_GREEN}$1${RESET}"
-		mkdir -p "${path}assets/$1"
+		mkdir -p "${asset_dir}$1"
 	else
 		output . "Skipping folder: ${YELLOW}$1${RESET}" 2
 	fi
@@ -110,7 +135,7 @@ updateasset()
 	asset=$1
 	asset_name=$(echo $asset | awk -F":" '{print $1}')
 	asset_hash=$(echo $asset | awk -F":" '{print $2}')
-	asset_path="${path}assets/$asset_name"
+	asset_path="${asset_dir}$asset_name"
 	url="https://huckleberry.runsafe.no/client/assets/$asset_name"
 	updatefile "$url" "$asset_hash" "$asset_path"
 }
@@ -191,31 +216,49 @@ usage()
 	echo "  -j <maxjobs>      Control paralellism of downloader."
 	echo "  --username <user> Specify username to log in as from command line."
 	echo "  --password <pass> Specify password to log in with from command line."
+	echo "  --channel <name>  Use a different update channel for launcher."
+	echo "  --noupdate        Skip checking for launcher updates."
 	echo "  --help            Show this help"
 	exit 0
 }
 
+getargs()
+{
+	while [ $# -gt 0 ]; do
+		case $1 in
+			"-v")		(( verbose=$verbose+1 ));;
+			"-p")		shift; path=$1 ;;
+			"--username")	shift; un=$1 ;;
+			"--password")	shift; pn=$1 ;;
+			"-j")		shift; max_jobs=$1 ;;
+			"--help")	usage ;;
+			"--noupdate")	update=0 ;;
+			"--")		shift; args=$*; return ;;
+		esac
+		shift
+	done
+}
+
+mkdirs()
+{
+	lib_dir="${path}libs/"
+	asset_dir="${path}assets/"
+	if [ ! -d "$lib_dir" ]; then
+		mkdir -p "$lib_dir"
+	fi
+	if [ ! -d "$asset_dir" ]; then
+		mkdir -p "$asset_dir"
+	fi
+}
+
+channel=unix-latest
+update=1
 max_jobs=32
 verbose=0
 path=$PWD/
+args=
 un=
 pn=
-while [ $# -gt 0 ]; do
-	case $1 in
-		"-v")		(( verbose=$verbose+1 ));;
-		"-p")		shift; path=$1 ;;
-		"--username")	shift; un=$1 ;;
-		"--password")	shift; pn=$1 ;;
-		"-j")		shift; max_jobs=$1 ;;
-		"--help")	usage ;;
-	esac
-	shift
-done
-lib_dir="${path}libs/"
-if [ ! -d "$lib_dir" ]; then
-  mkdir -p "$lib_dir"
-fi
-
 DULL=0
 BRIGHT=1
 FG_BLACK=30
@@ -258,4 +301,4 @@ BRIGHT_WHITE="$ESC[${BRIGHT};${FG_WHITE}m\002"
 REV_CYAN="$ESC[${DULL};${BG_WHITE};${BG_CYAN}m\002"
 REV_RED="$ESC[${DULL};${FG_YELLOW}; ${BG_RED}m\002"
 
-run
+run $*
