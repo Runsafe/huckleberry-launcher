@@ -12,6 +12,22 @@ run()
 	startclient 1.6.4
 }
 
+update()
+{
+	temp=$(mktemp)
+	output "Checking for launcher update"
+	curl -s -o $temp "https://github.com/Runsafe/huckleberry-launcher/releases/download/vUnix/unix_launch.sh"
+	latest=$(__rvm_md5_for $temp)
+	running=$(__rvm_md5_for $0)
+	if [ "$latest" != "$running" ]; then
+		output "Updating launcher"
+		mv $temp $0
+		output "Restarting launcher"
+		$0 $*
+		exit 0
+	fi
+}
+
 login()
 {
 	if [ -z "$un" ]; then
@@ -195,27 +211,12 @@ usage()
 	exit 0
 }
 
+
 max_jobs=32
 verbose=0
 path=$PWD/
 un=
 pn=
-while [ $# -gt 0 ]; do
-	case $1 in
-		"-v")		(( verbose=$verbose+1 ));;
-		"-p")		shift; path=$1 ;;
-		"--username")	shift; un=$1 ;;
-		"--password")	shift; pn=$1 ;;
-		"-j")		shift; max_jobs=$1 ;;
-		"--help")	usage ;;
-	esac
-	shift
-done
-lib_dir="${path}libs/"
-if [ ! -d "$lib_dir" ]; then
-  mkdir -p "$lib_dir"
-fi
-
 DULL=0
 BRIGHT=1
 FG_BLACK=30
@@ -258,4 +259,20 @@ BRIGHT_WHITE="$ESC[${BRIGHT};${FG_WHITE}m\002"
 REV_CYAN="$ESC[${DULL};${BG_WHITE};${BG_CYAN}m\002"
 REV_RED="$ESC[${DULL};${FG_YELLOW}; ${BG_RED}m\002"
 
+update
+while [ $# -gt 0 ]; do
+	case $1 in
+		"-v")		(( verbose=$verbose+1 ));;
+		"-p")		shift; path=$1 ;;
+		"--username")	shift; un=$1 ;;
+		"--password")	shift; pn=$1 ;;
+		"-j")		shift; max_jobs=$1 ;;
+		"--help")	usage ;;
+	esac
+	shift
+done
+lib_dir="${path}libs/"
+if [ ! -d "$lib_dir" ]; then
+  mkdir -p "$lib_dir"
+fi
 run
