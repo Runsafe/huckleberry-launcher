@@ -5,9 +5,9 @@ run()
 {
 	login
 	fetchinventory
-	updatelibs "${libs[@]}"
-	mkdirs ${asset_dirs[@]}
-	updateassets ${assets[@]}
+	parallelize updatelib "Updating libraries" "${libs[@]}"
+	parallelize mkassetdir "Creating asset folders" "${asset_dirs[@]}"
+	parallelize updateasset "Updating asset files" "${assets[@]}"
 	startclient 1.6.4
 }
 
@@ -48,56 +48,24 @@ fetchinventory()
 	IFS="," read -a libs <<< "`curl -s "https://huckleberry.runsafe.no/lib_list.php"`"
 }
 
-updatelibs()
+parallelize()
 {
-	output "Updating libraries"
-	if [ ! -d "$lib_dir" ]; then
-	  mkdir -p "$lib_dir"
-	fi
+	command=$1
+	shift
+	output "$1"
+	shift
 	while [ $# -gt 0 ]; do
 		running=$(jobs -pr)
 		if [ ${#running[@]} -lt $max_jobs ]; then
-			updatelib $1 &
+			$command $1 &
 			shift
 		else
 			wait
 		fi
 	done
 	wait
-	echo
-}
-
-mkdirs()
-{
-	output "Creating asset folders"
-	while [ $# -gt 0 ]; do
-		output . "Ensuring $1 exists." 2
-		running=$(jobs -pr)
-		if [ ${#running[@]} -lt $max_jobs ]; then
-			mkdir -p "${path}assets/$1" &
-			shift
-		else
-			wait
-		fi
-	done
-	wait
-	echo
-}
-
-updateassets()
-{
-	output "Updating asset files"
-	while [ $# -gt 0 ]; do
-		running=$(jobs -pr)
-		if [ ${#running[@]} -lt $max_jobs ]; then
-			updateasset $1 &
-			shift
-		else
-			wait
-		fi
-	done
-	wait
-	echo
+	echo done!
+	
 }
 
 startclient()
@@ -114,6 +82,16 @@ updatelib()
 	lib_path="$lib_dir$lib_name"
 	url="https://huckleberry.runsafe.no/client/libs/$lib_name"
 	updatefile "$url" "$lib_hash" "$lib_path"
+}
+
+mkassetdir()
+{
+	if [ ! -d "${path}assets/$1" ]; then
+		output N "Creating folder $1"
+		mkdir -p "${path}assets/$1"
+	else
+		output . "Skipping folder $1" 2
+	fi
 }
 
 updateasset()
@@ -222,5 +200,8 @@ while [ $# -gt 0 ]; do
 	shift
 done
 lib_dir="${path}libs/"
+if [ ! -d "$lib_dir" ]; then
+  mkdir -p "$lib_dir"
+fi
 
 run
