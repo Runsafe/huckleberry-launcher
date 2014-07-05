@@ -4,8 +4,10 @@ set +x
 run()
 {
 	echo -e '\033]2;Huckleberry\007'
-	update $*
 	getargs $*
+	if [ $update -eq 1 ]; then
+		update $*
+	fi
 	login
 	mkdirs
 	fetchinventory
@@ -28,7 +30,7 @@ update()
 		mv $temp $0
 		chmod +x $0
 		echo "Restarting launcher"
-		$0 $*
+		$0 $* --noupdate
 		exit
 	else
 		rm -f $temp
@@ -215,6 +217,7 @@ usage()
 	echo "  --username <user> Specify username to log in as from command line."
 	echo "  --password <pass> Specify password to log in with from command line."
 	echo "  --channel <name>  Use a different update channel for launcher."
+	echo "  --noupdate        Skip checking for launcher updates."
 	echo "  --help            Show this help"
 	exit 0
 }
@@ -229,6 +232,7 @@ getargs()
 			"--password")	shift; pn=$1 ;;
 			"-j")		shift; max_jobs=$1 ;;
 			"--help")	usage ;;
+			"--noupdate")	update=0 ;;
 		esac
 		shift
 	done
@@ -247,6 +251,7 @@ mkdirs()
 }
 
 channel=unix-latest
+update=1
 max_jobs=32
 verbose=0
 path=$PWD/
