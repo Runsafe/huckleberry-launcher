@@ -15,18 +15,19 @@ run()
 update()
 {
 	temp=$(mktemp)
-	output "Checking for launcher update"
+	echo "Checking for launcher update"
 	curl -s -o $temp "https://raw.githubusercontent.com/Runsafe/huckleberry-launcher/vUnix/unix_launch.sh"
 	latest=$(__rvm_md5_for $temp)
 	running=$(__rvm_md5_for $0)
 	if [ "$latest" != "$running" ]; then
-		output "Updating launcher"
+		echo "Updating launcher"
 		mv $temp $0
-		output "Restarting launcher"
 		chmod +x $0
-		$0 $*
-		exit 0
+		return 1
+	else
+		rm -f $temp
 	fi
+	return 0
 }
 
 login()
@@ -261,6 +262,11 @@ REV_CYAN="$ESC[${DULL};${BG_WHITE};${BG_CYAN}m\002"
 REV_RED="$ESC[${DULL};${FG_YELLOW}; ${BG_RED}m\002"
 
 update
+if [ $? -eq 1 ]; then
+	echo "Restarting launcher"
+	$0 $*
+	exit
+fi
 while [ $# -gt 0 ]; do
 	case $1 in
 		"-v")		(( verbose=$verbose+1 ));;
@@ -274,6 +280,6 @@ while [ $# -gt 0 ]; do
 done
 lib_dir="${path}libs/"
 if [ ! -d "$lib_dir" ]; then
-  mkdir -p "$lib_dir"
+	mkdir -p "$lib_dir"
 fi
 run
