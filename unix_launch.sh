@@ -59,6 +59,8 @@ updatelibs()
 		if [ ${#running[@]} -lt $max_jobs ]; then
 			updatelib $1 &
 			shift
+		else
+			wait
 		fi
 	done
 	wait
@@ -74,6 +76,8 @@ mkdirs()
 		if [ ${#running[@]} -lt $max_jobs ]; then
 			mkdir -p "${path}assets/$1" &
 			shift
+		else
+			wait
 		fi
 	done
 	wait
@@ -88,6 +92,8 @@ updateassets()
 		if [ ${#running[@]} -lt $max_jobs ]; then
 			updateasset $1 &
 			shift
+		else
+			wait
 		fi
 	done
 	wait
