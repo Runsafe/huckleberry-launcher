@@ -1,5 +1,4 @@
 #!/bin/bash
-max_jobs=32
 set +x
 
 run()
@@ -187,6 +186,7 @@ output()
 	fi
 }
 
+max_jobs=32
 verbose=0
 path=$PWD/
 un=
@@ -203,6 +203,9 @@ while [ $# -gt 0 ]; do
 	elif [ "$1" == "--password" ]; then
 		shift
 		pn=$1
+	elif [ "$1" == "-j" ]; then
+		shift
+		max_jobs=$1
 	fi
 	shift
 done
