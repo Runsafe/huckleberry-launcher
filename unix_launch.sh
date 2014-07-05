@@ -20,7 +20,7 @@ update()
 {
 	temp=$(mktemp)
 	echo "Checking for launcher update"
-	curl -s -o $temp "https://raw.githubusercontent.com/Runsafe/huckleberry-launcher/unix-latest/unix_launch.sh"
+	curl -s -o $temp "https://raw.githubusercontent.com/Runsafe/huckleberry-launcher/${channel}/unix_launch.sh"
 	latest=$(__rvm_md5_for $temp)
 	running=$(__rvm_md5_for $0)
 	if [ "$latest" != "$running" ]; then
@@ -214,6 +214,7 @@ usage()
 	echo "  -j <maxjobs>      Control paralellism of downloader."
 	echo "  --username <user> Specify username to log in as from command line."
 	echo "  --password <pass> Specify password to log in with from command line."
+	echo "  --channel <name>  Use a different update channel for launcher."
 	echo "  --help            Show this help"
 	exit 0
 }
@@ -245,6 +246,7 @@ mkdirs()
 	fi
 }
 
+channel=unix-latest
 max_jobs=32
 verbose=0
 path=$PWD/
