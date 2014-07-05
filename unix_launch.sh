@@ -8,6 +8,7 @@ run()
 	parallelize updatelib "${GREEN}Updating libraries${RESET}" "${libs[@]}"
 	parallelize mkassetdir "${GREEN}Creating asset folders${RESET}" "${asset_dirs[@]}"
 	parallelize updateasset "${GREEN}Updating asset files${RESET}" "${assets[@]}"
+	cleanup 
 	startclient 1.6.4
 }
 
@@ -70,6 +71,12 @@ parallelize()
 	wait
 	echo -e "${BRIGHT_GREEN}done!${RESET}"
 	
+}
+
+cleanup()
+{
+	find */ -type f -mmin +30 -delete
+	find -type d -empty -delete
 }
 
 startclient()
@@ -138,6 +145,7 @@ updatefile()
 		fi
 	else
 		output . "Skipping up to date file ${BRIGHT_BLACK}$sourceuri${RESET}" 2
+		touch "${target}" "${target}.md5"
 	fi
 }
 
