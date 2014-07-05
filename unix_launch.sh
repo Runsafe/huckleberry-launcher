@@ -3,6 +3,7 @@ set +x
 
 run()
 {
+	echo -e '\033]2;Huckleberry\007'
 	update $*
 	getargs $*
 	login
