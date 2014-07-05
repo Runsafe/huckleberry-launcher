@@ -111,4 +111,4 @@ do
 done
 
 libbys=$(IFS=':'; echo "${lib_bin[*]}")
-$(java -Djava.library.path="libs" -cp "${libbys}" net.minecraft.client.main.Main --username $user --session $key --version 1.6.4)
+java -Djava.library.path="libs" -cp "${libbys}" net.minecraft.client.main.Main --username $user --session $key --version 1.6.4
