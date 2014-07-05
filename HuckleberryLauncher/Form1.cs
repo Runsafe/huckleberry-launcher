@@ -99,7 +99,7 @@ namespace HuckleberryLauncher
 
                 using (StreamWriter writer = new StreamWriter(MainForm.profile))
                 {
-                    writer.WriteLine(response);
+                    writer.Write(response);
                     writer.Dispose();
                 }
             }
