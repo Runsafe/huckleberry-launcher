@@ -3,7 +3,10 @@ set +x
 
 run()
 {
+	update $*
+	getargs $*
 	login
+	mkdirs
 	fetchinventory
 	parallelize updatelib "${GREEN}Updating libraries${RESET}" "${libs[@]}"
 	parallelize mkassetdir "${GREEN}Creating asset folders${RESET}" "${asset_dirs[@]}"
@@ -23,11 +26,12 @@ update()
 		echo "Updating launcher"
 		mv $temp $0
 		chmod +x $0
-		return 1
+		echo "Restarting launcher"
+		$0 $*
+		exit
 	else
 		rm -f $temp
 	fi
-	return 0
 }
 
 login()
@@ -93,7 +97,7 @@ parallelize()
 
 cleanup()
 {
-	find */ -type f -mmin +30 -delete
+	find $asset_dir $lib_dir -type f -mmin +30 -delete
 	find -type d -empty -delete
 }
 
@@ -115,9 +119,9 @@ updatelib()
 
 mkassetdir()
 {
-	if [ ! -d "${path}assets/$1" ]; then
+	if [ ! -d "${asset_dir}$1" ]; then
 		output "${BRIGHT_GREEN}N${RESET}" "Creating folder: ${BRIGHT_GREEN}$1${RESET}"
-		mkdir -p "${path}assets/$1"
+		mkdir -p "${asset_dir}$1"
 	else
 		output . "Skipping folder: ${YELLOW}$1${RESET}" 2
 	fi
@@ -128,7 +132,7 @@ updateasset()
 	asset=$1
 	asset_name=$(echo $asset | awk -F":" '{print $1}')
 	asset_hash=$(echo $asset | awk -F":" '{print $2}')
-	asset_path="${path}assets/$asset_name"
+	asset_path="${asset_dir}$asset_name"
 	url="https://huckleberry.runsafe.no/client/assets/$asset_name"
 	updatefile "$url" "$asset_hash" "$asset_path"
 }
@@ -213,6 +217,32 @@ usage()
 	exit 0
 }
 
+getargs()
+{
+	while [ $# -gt 0 ]; do
+		case $1 in
+			"-v")		(( verbose=$verbose+1 ));;
+			"-p")		shift; path=$1 ;;
+			"--username")	shift; un=$1 ;;
+			"--password")	shift; pn=$1 ;;
+			"-j")		shift; max_jobs=$1 ;;
+			"--help")	usage ;;
+		esac
+		shift
+	done
+}
+
+mkdirs()
+{
+	lib_dir="${path}libs/"
+	asset_dir="${path}assets/"
+	if [ ! -d "$lib_dir" ]; then
+		mkdir -p "$lib_dir"
+	fi
+	if [ ! -d "$asset_dir" ]; then
+		mkdir -p "$asset_dir"
+	fi
+}
 
 max_jobs=32
 verbose=0
@@ -261,25 +291,4 @@ BRIGHT_WHITE="$ESC[${BRIGHT};${FG_WHITE}m\002"
 REV_CYAN="$ESC[${DULL};${BG_WHITE};${BG_CYAN}m\002"
 REV_RED="$ESC[${DULL};${FG_YELLOW}; ${BG_RED}m\002"
 
-update
-if [ $? -eq 1 ]; then
-	echo "Restarting launcher"
-	$0 $*
-	exit
-fi
-while [ $# -gt 0 ]; do
-	case $1 in
-		"-v")		(( verbose=$verbose+1 ));;
-		"-p")		shift; path=$1 ;;
-		"--username")	shift; un=$1 ;;
-		"--password")	shift; pn=$1 ;;
-		"-j")		shift; max_jobs=$1 ;;
-		"--help")	usage ;;
-	esac
-	shift
-done
-lib_dir="${path}libs/"
-if [ ! -d "$lib_dir" ]; then
-	mkdir -p "$lib_dir"
-fi
-run
+run $*
