@@ -23,6 +23,7 @@ update()
 		output "Updating launcher"
 		mv $temp $0
 		output "Restarting launcher"
+		chmod +x $0
 		$0 $*
 		exit 0
 	fi
