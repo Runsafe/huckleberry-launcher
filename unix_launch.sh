@@ -30,7 +30,7 @@ update()
 		mv $temp $0
 		chmod +x $0
 		echo "Restarting launcher"
-		$0 $* --noupdate
+		$0 --noupdate $*
 		exit
 	else
 		rm -f $temp
@@ -219,7 +219,6 @@ usage()
 	echo "  --channel <name>  Use a different update channel for launcher."
 	echo "  --noupdate        Skip checking for launcher updates."
 	echo "  --help            Show this help"
-	echo "  --                Pass remaining arguments to the game client"
 	exit 0
 }
 
