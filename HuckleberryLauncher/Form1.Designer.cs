@@ -40,7 +40,6 @@
             this.player_head = new System.Windows.Forms.PictureBox();
             this.focus_holder = new System.Windows.Forms.Label();
             this.loadbar = new System.Windows.Forms.ProgressBar();
-            this.updates_panel = new HuckleberryLauncher.TransparentRTF();
             this.logo = new HuckleberryLauncher.ClickThroughPictureBox();
             this.player_splash = new HuckleberryLauncher.SplashPlayerImage();
             ((System.ComponentModel.ISupportInitialize)(this.exitButton)).BeginInit();
@@ -176,20 +175,6 @@
             this.loadbar.TabIndex = 8;
             this.loadbar.Visible = false;
             // 
-            // updates_panel
-            // 
-            this.updates_panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.updates_panel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.updates_panel.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.updates_panel.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updates_panel.Location = new System.Drawing.Point(25, 141);
-            this.updates_panel.Name = "updates_panel";
-            this.updates_panel.ReadOnly = true;
-            this.updates_panel.Size = new System.Drawing.Size(494, 353);
-            this.updates_panel.TabIndex = 7;
-            this.updates_panel.Text = "Loading latest updates...";
-            this.updates_panel.Enter += new System.EventHandler(this.updates_panel_Enter);
-            // 
             // logo
             // 
             this.logo.BackColor = System.Drawing.Color.Transparent;
@@ -219,7 +204,6 @@
             this.ClientSize = new System.Drawing.Size(967, 548);
             this.Controls.Add(this.loadbar);
             this.Controls.Add(this.focus_holder);
-            this.Controls.Add(this.updates_panel);
             this.Controls.Add(this.logo);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.panel1);
@@ -252,7 +236,6 @@
         private SplashPlayerImage player_splash;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private ClickThroughPictureBox logo;
-        private TransparentRTF updates_panel;
         private System.Windows.Forms.Label focus_holder;
         private System.Windows.Forms.Label auth_loading_label;
         private System.Windows.Forms.Button logout_button;

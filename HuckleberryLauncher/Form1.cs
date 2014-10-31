@@ -36,7 +36,7 @@ namespace HuckleberryLauncher
             Directory.CreateDirectory(folder);
 
             player_splash.Image = (Image) Properties.Resources.ResourceManager.GetObject("player_shot_" + new Random().Next(1, 8));
-            new Thread(() => queryLatest()).Start();
+            //new Thread(() => queryLatest()).Start();
         }
 
         public void queryLatest()
@@ -54,8 +54,8 @@ namespace HuckleberryLauncher
 
         public void setLatestContent(String content)
         {
-            Action action = delegate { updates_panel.Rtf = content; };
-            updates_panel.Invoke(action);
+            //Action action = delegate { updates_panel.Rtf = content; };
+            //updates_panel.Invoke(action);
         }
 
         public void authenticateUser(String username, String password)
@@ -136,7 +136,7 @@ namespace HuckleberryLauncher
                 {
                     applySkin(skinPath);
                 };
-                client.DownloadFileAsync(new Uri("http://s3.amazonaws.com/MinecraftSkins/" + this.loggedIn + ".png"), skinPath);
+                client.DownloadFileAsync(new Uri("http://skins.runsafe.no/" + this.loggedIn + ".png"), skinPath);
                 client.Dispose();
             }
         }
@@ -145,21 +145,26 @@ namespace HuckleberryLauncher
         {
             if (File.Exists(skinFile))
             {
-                Bitmap bmpImage = new Bitmap(Image.FromFile(skinFile));
-                Bitmap bmpCrop = bmpImage.Clone(new Rectangle(8, 8, 8, 8), bmpImage.PixelFormat);
+                FileInfo info = new FileInfo(skinFile);
 
-                using (bmpCrop)
+                if (info.Length > 0)
                 {
-                    var bmp2 = new Bitmap(player_head.Width, player_head.Height);
-                    using (var g = Graphics.FromImage(bmp2))
+                    Bitmap bmpImage = new Bitmap(Image.FromFile(skinFile));
+                    Bitmap bmpCrop = bmpImage.Clone(new Rectangle(8, 8, 8, 8), bmpImage.PixelFormat);
+
+                    using (bmpCrop)
                     {
-                        g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.DrawImage(bmpCrop, new Rectangle(Point.Empty, bmp2.Size));
-                        this.Invoke((MethodInvoker)delegate()
+                        var bmp2 = new Bitmap(player_head.Width, player_head.Height);
+                        using (var g = Graphics.FromImage(bmp2))
                         {
-                            player_head.Image = (Image)bmp2;
-                        });
+                            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                            g.DrawImage(bmpCrop, new Rectangle(Point.Empty, bmp2.Size));
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                player_head.Image = (Image)bmp2;
+                            });
+                        }
                     }
                 }
             }
