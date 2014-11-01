@@ -456,14 +456,47 @@ namespace HuckleberryLauncher
             {
                 try
                 {
-                    Process process = new System.Diagnostics.Process();
-                    ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "java";
-                    startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    Application.Exit();
+                    String path = null;
+
+                    String[] dirs = Directory.GetDirectories(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + Path.DirectorySeparatorChar + "Java");
+
+                    foreach (String subDir in dirs)
+                    {
+                        String[] subDirs = Directory.GetDirectories(subDir);
+
+                        foreach (String subSubDir in subDirs)
+                        {
+                            if (Path.GetFileName(subSubDir) == "bin")
+                            {
+                                String[] files = Directory.GetFiles(subSubDir);
+
+                                foreach (String file in files)
+                                {
+                                    if (Path.GetFileName(file) == "java.exe")
+                                    {
+                                        path = file;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (path != null)
+                    {
+                        Process process = new System.Diagnostics.Process();
+                        ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        startInfo.FileName = path;
+                        startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        Application.Exit();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Could not find Java. :(");
+                    }
                 }
                 catch (Exception e)
                 {
