@@ -488,9 +488,10 @@ namespace HuckleberryLauncher
                         ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                         startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                         startInfo.FileName = path;
-                        startInfo.Arguments = "-Djava.library.path=" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + " net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
+                        startInfo.Arguments = "-Djava.library.path=\"" + MainForm.folder + @"libs\ -cp " + String.Join(";", this.libCollection) + "\" net.minecraft.client.main.Main --username " + this.loggedIn + " --session " + this.accessToken + " --version 1.6.4 --gameDir " + MainForm.folder + " --assetsDir " + MainForm.folder + "assets";
                         process.StartInfo = startInfo;
                         process.Start();
+
                         Application.Exit();
                     }
                     else
@@ -500,7 +501,7 @@ namespace HuckleberryLauncher
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Java path not set-up! Consult the Huckleberry wiki!");
+                    MessageBox.Show(e.Message);
                 }
             }
         }
